@@ -34,12 +34,18 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix='!')
 
 @bot.command(name='resize', help='Have Reco resize an image for you. usage = "!resize 128 128"')
-async def resizeimage(ctx, a, b):
+async def resizeimage(ctx, *args):
     if len(ctx.message.attachments) > 0:
         attachment = ctx.message.attachments[0]
     else:
         return
 
+    if len(args) > 1:
+        a = args[0]
+        b = args[1]
+    else:
+        a = args[0]
+        b = None
     im = Image.open(requests.get(attachment, stream=True).raw)
 
     if (a != None) and (b != None):
