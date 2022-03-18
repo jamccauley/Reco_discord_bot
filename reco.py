@@ -33,6 +33,57 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 
 bot = commands.Bot(command_prefix='!')
 
+@bot.command(name='resize', help='Have Reco resize an image for you. usage = "!resize 128 128"')
+async def resizeimage(ctx, a, b):
+    if len(ctx.message.attachments) > 0:
+        attachment = ctx.message.attachments[0]
+    else:
+        return
+
+    im = Image.open(requests.get(attachment, stream=True).raw)
+
+    if (a != None) and (b != None):
+        im = im.resize(a,b)
+    elif (a != None):
+        im = im.resize(a,a)
+
+    with io.BytesIO() as image_binary:
+        im.save(image_binary, 'PNG')
+        image_binary.seek(0)
+        await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
+
+@bot.command(name='thumb', help='Have Reco resize an image into a thumbnail for you.')
+async def thumbimage(ctx):
+    if len(ctx.message.attachments) > 0:
+        attachment = ctx.message.attachments[0]
+    else:
+        return
+
+    im = Image.open(requests.get(attachment, stream=True).raw)
+
+    im = im.thumbnail()
+
+    with io.BytesIO() as image_binary:
+        im.save(image_binary, 'PNG')
+        image_binary.seek(0)
+        await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
+
+@bot.command(name='grey', help='Have Reco turn an image B&W for you.')
+async def greyimage(ctx):
+    if len(ctx.message.attachments) > 0:
+        attachment = ctx.message.attachments[0]
+    else:
+        return
+
+    im = Image.open(requests.get(attachment, stream=True).raw)
+
+    im = im.convert('L')
+
+    with io.BytesIO() as image_binary:
+        im.save(image_binary, 'PNG')
+        image_binary.seek(0)
+        await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
+
 @bot.command(name='deepfry', help='Have Reco help you deep fry an image.')
 async def getimage(ctx):
     if len(ctx.message.attachments) > 0:
