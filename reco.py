@@ -43,9 +43,9 @@ async def resizeimage(ctx, a, b):
     im = Image.open(requests.get(attachment, stream=True).raw)
 
     if (a != None) and (b != None):
-        im = im.resize(a,b)
+        im = im.resize((int(a),int(b)))
     elif (a != None):
-        im = im.resize(a,a)
+        im = im.resize((int(a),int(a)))
 
     with io.BytesIO() as image_binary:
         im.save(image_binary, 'PNG')
@@ -61,7 +61,7 @@ async def thumbimage(ctx):
 
     im = Image.open(requests.get(attachment, stream=True).raw)
 
-    im = im.thumbnail()
+    im.thumbnail((165,165))
 
     with io.BytesIO() as image_binary:
         im.save(image_binary, 'PNG')
