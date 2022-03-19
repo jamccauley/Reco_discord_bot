@@ -46,8 +46,13 @@ async def resizeimage(ctx, *args):
     else:
         a = args[0]
         b = None
-    im = Image.open(requests.get(attachment, stream=True).raw)
 
+    if a > 1400:
+        a = 1400
+    if b > 1400:
+        b = 1400
+
+    im = Image.open(requests.get(attachment, stream=True).raw)
     if (a != None) and (b != None):
         im = im.resize((int(a),int(b)))
     elif (a != None):
